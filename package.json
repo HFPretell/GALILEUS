@@ -1,13 +1,19 @@
 {
   "name": "galileus",
   "version": "1.0.0",
-  "description": "",
+  "description": "API de análisis pasivo de seguridad web",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "security",
+    "api",
+    "scanner",
+    "web"
+  ],
+  "author": "HFPretell",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
