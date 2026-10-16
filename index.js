@@ -3,6 +3,7 @@ const express = require("express");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const { analyze } = require("./analyzer");
+const { validateUrl } = require("./validators");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -66,15 +67,21 @@ app.post("/scan", requireApiKey, scanLimiter, async (req, res) => {
     return res.status(400).json({ error: "Falta el campo 'url' (string)" });
   }
 
+  // Validación SSRF
+  const validation = validateUrl(url);
+  if (!validation.safe) {
+    return res.status(400).json({ error: validation.reason });
+  }
+
   try {
-    const report = await analyze(url);
+    const report = await analyze(validation.url);
     res.json(report);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Arrancar el server con manejo de errores
+// manejo de errores
 const server = app.listen(PORT, () => {
   console.log(`Galileus API corriendo en http://localhost:${PORT}`);
 });
